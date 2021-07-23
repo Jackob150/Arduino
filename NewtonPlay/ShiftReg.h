@@ -6,6 +6,7 @@
 #define ShiftReg_h
 
 #include "Arduino.h"
+#define R_SIZE 8
 
 class ShiftReg
 {
@@ -20,7 +21,7 @@ class ShiftReg
     void init();
     int read_serial();
     void write_bit(int val);
-    void write_byte(uint8_t byte, bool disp);
+    void write_byte(uint8_t byte, bool disp=true);
     void output_parallel();
 
   private:

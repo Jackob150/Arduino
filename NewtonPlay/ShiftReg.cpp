@@ -70,7 +70,7 @@ void ShiftReg::write_bit(int val)
 
 void ShiftReg::write_byte(uint8_t val, bool disp)
 {
-    for (int i = 8; i >= 0; i--) {
+    for (int i = R_SIZE; i >= 0; i--) {
         write_bit((val & (1 << i)) >> i);
     }
     if (disp) {

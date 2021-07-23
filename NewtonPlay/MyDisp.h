@@ -17,14 +17,18 @@ class MyDisp
 
         uint8_t disp_arr[M_SIZE];
 
-        /*int get_refresh_delay();
         int get_reg_ds(ShiftReg * reg);
         int get_reg_stcp(ShiftReg * reg);
         int get_reg_shcp(ShiftReg * reg);
         int get_reg_q7s(ShiftReg * reg);
-        int set_refresh_delay(int delay);*/
+        int get_refresh_delay();
+        void set_refresh_delay(int delay);
 
         void display();
+        void sleep(int miliseconds);
+
+        void empty_screen(bool disp=true);
+        void set_pix(int val, int x, int y);
 
     private:
         ShiftReg * _disp;
