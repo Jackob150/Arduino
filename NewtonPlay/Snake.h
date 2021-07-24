@@ -39,6 +39,7 @@ class Snake
         void check_tail();
         void check_apple();
         void place_apple();
+        void put_apple();
         void game_over();
 
     private:

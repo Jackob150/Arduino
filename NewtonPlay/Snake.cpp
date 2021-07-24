@@ -11,20 +11,6 @@
 
 Snake::Snake()
 {
-    _snake_arr[0].x = 1;
-    _snake_arr[0].y = 7;
-    _snake_arr[1].x = 1;
-    _snake_arr[1].y = 8;
-    _tail.x = 1;
-    _tail.y = 8;
-
-    _apple.x = 7;
-    _apple.y = 2;
-
-    _len = 2;
-    _dir = UP;
-    _speed = 1;
-    _points = 0;
     _state = MENU;
     _diff = 1;
 }
@@ -43,8 +29,9 @@ void Snake::button_action(int button)
                 _snake_arr[1].y = 8;
                 _tail.x = 1;
                 _tail.y = 8;
-                _apple.x = 1;
-                _apple.y = 3;
+
+                put_apple();
+                
                 _len = 2;
                 _dir = UP;
                 _speed = 1 + int(_diff / 3);
@@ -170,15 +157,20 @@ void Snake::check_apple()
         if (_points % (5 - int(_diff/2)) == 0) {
             _speed++;
         }
-        bool status = false;
-        while (!status) {
-            status = true;
-            _apple.x = int(random(1, 9));
-            _apple.y = int(random(1, 9));
-            for (int i = 0; i < _len; i++) {
-                if (_apple.x == _snake_arr[i].x && _apple.y == _snake_arr[i].y) {
-                    status = false;
-                }
+        put_apple();
+    }
+}
+
+void Snake::put_apple()
+{
+    bool status = false;
+    while (!status) {
+        status = true;
+        _apple.x = int(random(1, 9));
+        _apple.y = int(random(1, 9));
+        for (int i = 0; i < _len; i++) {
+            if (_apple.x == _snake_arr[i].x && _apple.y == _snake_arr[i].y) {
+                status = false;
             }
         }
     }
