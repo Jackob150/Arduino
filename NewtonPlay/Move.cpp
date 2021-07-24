@@ -1,5 +1,5 @@
 /*
-  Move.h - Simple Game class implementation for presentation purposes.
+  Move.cpp - Simple Game class implementation for presentation purposes.
   Created by Jakub Ciesielski, 22.07.2021.
 */
 

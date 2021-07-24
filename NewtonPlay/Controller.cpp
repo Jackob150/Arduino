@@ -1,5 +1,5 @@
 /*
-  Controller.h - Library for 4-button controller to NewtonPlay console.
+  Controller.cpp - Library for 4-button controller to NewtonPlay console.
   Created by Jakub Ciesielski, 22.07.2021.
 */
 

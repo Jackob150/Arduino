@@ -1,13 +1,17 @@
 #include "ShiftReg.h"
 #include "MyDisp.h"
 #include "Controller.h"
-#include "Move.h"
+/* --- Import game header file --- */
+#include "Snake.h"
+/* ------------------------------- */
 
 ShiftReg disp = ShiftReg(5, 6, 7, 11);
 ShiftReg ref = ShiftReg(8, 9, 10, 12);
 MyDisp screen = MyDisp(&disp, &ref, 1);
 Controller contr = Controller(14, 15, 16, 17, 2);
-Move game = Move(4, 4);
+/* --- Create game object from the proper class --- */
+Snake game = Snake();
+/* ------------------------------------------------ */
 
 void interrupt_action()
 {
