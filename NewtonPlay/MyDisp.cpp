@@ -84,3 +84,133 @@ void MyDisp::set_pix(int val, int x, int y)
         disp_arr[y - 1] &= ~(1 << (M_SIZE - x));
     }
 }
+
+void MyDisp::print_digit(int x, int y, int digit)
+{
+    switch (digit) {
+        case 0:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x, y + 4);
+            set_pix(1, x + 1, y + 4);
+            set_pix(1, x + 2, y + 4);
+            set_pix(1, x, y + 1);
+            set_pix(1, x, y + 2);
+            set_pix(1, x, y + 3);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            break;
+        case 1:
+            set_pix(1, x + 2, y);
+            set_pix(1, x + 1, y + 1);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 2, y + 4);
+            break;
+        case 2:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x, y + 4);
+            set_pix(1, x + 1, y + 4);
+            set_pix(1, x + 2, y + 4);
+            set_pix(1, x, y + 2);
+            set_pix(1, x, y + 3);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 1, y + 2);
+            break;
+        case 3:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x, y + 4);
+            set_pix(1, x + 1, y + 4);
+            set_pix(1, x + 2, y + 4);
+            set_pix(1, x, y + 2);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 1, y + 2);
+            break;
+        case 4:
+            set_pix(1, x, y);
+            set_pix(1, x, y + 1);
+            set_pix(1, x, y + 2);
+            set_pix(1, x + 1, y + 2);
+            set_pix(1, x + 2, y);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 2, y + 4);
+            break;
+        case 5:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x, y + 4);
+            set_pix(1, x + 1, y + 4);
+            set_pix(1, x + 2, y + 4);
+            set_pix(1, x, y + 1);
+            set_pix(1, x, y + 2);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 1, y + 2);
+            break;
+        case 6:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x, y + 4);
+            set_pix(1, x + 1, y + 4);
+            set_pix(1, x + 2, y + 4);
+            set_pix(1, x, y + 1);
+            set_pix(1, x, y + 2);
+            set_pix(1, x, y + 3);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 1, y + 2);
+            break;
+        case 7:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 2, y + 4);
+            break;
+        case 8:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x, y + 4);
+            set_pix(1, x + 1, y + 4);
+            set_pix(1, x + 2, y + 4);
+            set_pix(1, x, y + 1);
+            set_pix(1, x, y + 2);
+            set_pix(1, x, y + 3);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 1, y + 2);
+            break;
+        case 9:
+            set_pix(1, x, y);
+            set_pix(1, x + 1, y);
+            set_pix(1, x + 2, y);
+            set_pix(1, x, y + 4);
+            set_pix(1, x + 1, y + 4);
+            set_pix(1, x + 2, y + 4);
+            set_pix(1, x, y + 1);
+            set_pix(1, x, y + 2);
+            set_pix(1, x + 2, y + 1);
+            set_pix(1, x + 2, y + 2);
+            set_pix(1, x + 2, y + 3);
+            set_pix(1, x + 1, y + 2);
+            break;
+    }
+}

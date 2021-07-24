@@ -30,6 +30,8 @@ class MyDisp
         void empty_screen(bool disp=true);
         void set_pix(int val, int x, int y);
 
+        void print_digit(int x, int y, int digit);
+
     private:
         ShiftReg * _disp;
         ShiftReg * _ref;

@@ -81,29 +81,34 @@ void Snake::screen_display(MyDisp * screen)
         check_bounds();
         check_tail();
         check_apple();
+        if (_state == MENU) {
+            screen->sleep(1000);
+        }
     }
 }
 
 void Snake::print_menu(MyDisp * screen)
 {
-    screen->empty_screen();
+    screen->empty_screen(false);
     for (int i = 1; i <= _diff; i++) {
         screen->set_pix(1, i, 1);
     }
-    screen->set_pix(1, 5, 3);
-    screen->set_pix(1, 5, 4);
-    screen->set_pix(1, 5, 5);
-    screen->set_pix(1, 5, 6);
-    screen->set_pix(1, 5, 7);
-    screen->set_pix(1, 5, 8);
-    screen->set_pix(1, 4, 7);
-    screen->set_pix(1, 6, 7);
+    print_score(screen);
     screen->display();
+}
+
+void Snake::print_score(MyDisp * screen)
+{
+    int s_0 = _points % 10;
+    int s_1 = int(_points / 10);
+
+    screen->print_digit(1, 3, s_1);
+    screen->print_digit(5, 3, s_0);
 }
 
 void Snake::print(MyDisp * screen)
 {
-    screen->empty_screen();
+    screen->empty_screen(false);
     for (int i = 0; i < _len; i++) {
         screen->set_pix(1, _snake_arr[i].x, _snake_arr[i].y);
     }

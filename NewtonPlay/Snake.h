@@ -32,6 +32,7 @@ class Snake
         virtual void screen_display(MyDisp * screen);
 
         void print_menu(MyDisp * screen);
+        void print_score(MyDisp * screen);
         void print(MyDisp * screen);
         void move();
         void check_bounds();
