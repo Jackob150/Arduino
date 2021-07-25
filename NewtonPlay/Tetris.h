@@ -10,8 +10,8 @@
 #include "Controller.h"
 #include "Game.h"
 
-#define MAX_SIZE 64
 #define LEN 4
+#define N_SHAPES 7
 
 enum State
 {
@@ -24,18 +24,21 @@ enum Shape
     LINE,
     SQUARE,
     T_BLOCK,
-    S_BLOCK,
-    L_BLOCK
+    S_BLOCK_1,
+    S_BLOCK_2,
+    L_BLOCK_1,
+    L_BLOCK_2
 };
 
 struct Point
 {
     int x, y;
-}
+};
 
 struct Block
 {
     struct Point pixels[LEN];
+    struct Point idp;
     int shape;
     int orient;
 };
@@ -53,17 +56,21 @@ class Tetris
         void print_game(MyDisp * screen);
 
         void draw_block();
-        void move_block();
+        void move_block(int dir);
         void rotate_block();
-        void check_block();
         void update_ground();
-        void check_over();
-        void game_over();
+        void check_line();
+
+        void copy_block(struct Block * copy_to, struct Block * copy_from);
+        int set_block(struct Block * block, int x, int y, int shape, int orient);
+        int validate_ground(struct Block * block);
 
     private:
-        struct Block block;
-        struct Point ground[MAX_LEN];
+        struct Block _block;
+        int _ground[M_SIZE][M_SIZE];
         int _state;
         int _score;
         int _delay;
 };
+
+#endif
