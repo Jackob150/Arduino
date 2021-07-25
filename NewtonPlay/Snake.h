@@ -35,12 +35,12 @@ class Snake
         void print_score(MyDisp * screen);
         void print(MyDisp * screen);
         void move();
-        void check_bounds();
-        void check_tail();
+        void check_bounds(MyDisp * screen);
+        void check_tail(MyDisp * screen);
         void check_apple();
         void place_apple();
         void put_apple();
-        void game_over();
+        void game_over(MyDisp * screen);
 
     private:
         struct Point _snake_arr[MAX_LEN];

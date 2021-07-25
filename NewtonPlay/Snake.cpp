@@ -65,12 +65,9 @@ void Snake::screen_display(MyDisp * screen)
         print(screen);
         screen->sleep(int(1000/_speed));
         move();
-        check_bounds();
-        check_tail();
+        check_bounds(screen);
+        check_tail(screen);
         check_apple();
-        if (_state == MENU) {
-            screen->sleep(1000);
-        }
     }
 }
 
@@ -129,20 +126,20 @@ void Snake::move()
     _tail = tmp_1;
 }
 
-void Snake::check_bounds()
+void Snake::check_bounds(MyDisp * screen)
 {
     for (int i = 0; i < _len; i++) {
         if (_snake_arr[i].x < 1 || _snake_arr[i].x > 8 || _snake_arr[i].y < 1 || _snake_arr[i].y > 8) {
-            game_over();
+            game_over(screen);
         }
     }
 }
 
-void Snake::check_tail()
+void Snake::check_tail(MyDisp * screen)
 {
     for (int i = 1; i < _len; i++) {
         if (_snake_arr[0].x == _snake_arr[i].x && _snake_arr[0].y == _snake_arr[i].y) {
-            game_over();
+            game_over(screen);
         }
     }
 
@@ -176,7 +173,8 @@ void Snake::put_apple()
     }
 }
 
-void Snake::game_over()
+void Snake::game_over(MyDisp * screen)
 {
+    screen->sleep(1000);
     _state = MENU;
 }
