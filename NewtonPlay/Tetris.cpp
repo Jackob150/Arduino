@@ -11,7 +11,9 @@
 
 Tetris::Tetris()
 {
-
+    _state = MENU;
+    _score = 0;
+    _delay = 1000;
 }
 
 void Tetris::button_action(int button)
