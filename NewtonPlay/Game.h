@@ -12,7 +12,7 @@
 class Game
 {
     public:
-        virtual void button_action(int button) = 0;
+        virtual void button_action(MyDisp * screen, int button) = 0;
         virtual void screen_display(MyDisp * screen) = 0;
 };
 

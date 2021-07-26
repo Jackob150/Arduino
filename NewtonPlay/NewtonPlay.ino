@@ -15,7 +15,7 @@ Snake game = Snake();
 
 void interrupt_action()
 {
-    game.button_action(contr.check_buttons());
+    game.button_action(&screen, contr.check_buttons());
 }
 
 void setup() {

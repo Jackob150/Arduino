@@ -15,7 +15,7 @@ Snake::Snake()
     _diff = 1;
 }
 
-void Snake::button_action(int button)
+void Snake::button_action(MyDisp * screen, int button)
 {
     if (_state == MENU) {
         switch (button) {

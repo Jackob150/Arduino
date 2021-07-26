@@ -28,7 +28,7 @@ class Snake
     public:
         Snake();
 
-        virtual void button_action(int button);
+        virtual void button_action(MyDisp * screen, int button);
         virtual void screen_display(MyDisp * screen);
 
         void print_menu(MyDisp * screen);
