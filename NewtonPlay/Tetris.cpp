@@ -13,38 +13,46 @@ Tetris::Tetris()
 {
     _state = MENU;
     _score = 0;
+    _button_time = 0;
 }
 
-void Tetris::button_action(int button)
+void Tetris::button_action(MyDisp * screen, int button)
 {
     if (_state == MENU) {
         switch (button) {
             case UP:
                 break;
             case DOWN:
+                for (int i = 0; i < M_SIZE; i++) {
+                    for (int j = 0; j < M_SIZE; j++) {
+                        _ground[i][j] = 0;
+                    }
+                }
                 draw_block();
-                _state = PLAY;
                 _score = 0;
                 _delay = 1000;
+                _state = PLAY;
+                move_block(screen, UP);
                 break;
             case LEFT:
                 break;
             case RIGHT:
                 break;
         }
-    }
-    if (_state == PLAY) {
+    } else if (_state == PLAY && millis() - _button_time > DEBOUNCE) {
+        _button_time = millis();
         switch (button) {
             case UP:
-                rotate_block();
+                rotate_block(screen);
                 break;
             case DOWN:
+                move_block(screen, DOWN);
                 break;
             case LEFT:
-                move_block(LEFT);
+                move_block(screen, LEFT);
                 break;
             case RIGHT:
-                move_block(RIGHT);
+                move_block(screen, RIGHT);
                 break;
         }
     }
@@ -58,7 +66,7 @@ void Tetris::screen_display(MyDisp * screen)
     if (_state == PLAY) {
         print_game(screen);
         screen->sleep(_delay);
-        move_block(DOWN);
+        move_block(screen, DOWN);
     }
 }
 
@@ -66,9 +74,7 @@ void Tetris::print_menu(MyDisp * screen)
 {
     screen->empty_screen(false);
     screen->set_pix(1, 1, 1);
-    screen->set_pix(1, 1, 8);
     screen->set_pix(1, 8, 1);
-    screen->set_pix(1, 8, 8);
     print_score(screen);
     screen->display();
 }
@@ -100,6 +106,7 @@ void Tetris::print_game(MyDisp * screen)
 
 void Tetris::draw_block()
 {
+    randomSeed(micros());
     int type = (int)(random(0, N_SHAPES));
     _block.shape = type;
     _block.orient = 0;
@@ -108,49 +115,41 @@ void Tetris::draw_block()
     set_block(&_block, _block.idp.x, _block.idp.y, _block.shape, _block.orient);
 }
 
-void Tetris::move_block(int dir)
+void Tetris::move_block(MyDisp * screen, int dir)
 {
     int exit_status = 0;
     struct Block tmp;
 
     copy_block(&tmp, &_block);
     switch (dir) {
+        case UP:
+            set_block(&tmp, tmp.idp.x, --tmp.idp.y, tmp.shape, tmp.orient);
+            break;
         case DOWN:
-            tmp.idp.y++;
-            for (int i = 0; i < LEN; i++) {
-                tmp.pixels[i].y++;
-            }
-            exit_status = validate_ground(&tmp);
+            exit_status = set_block(&tmp, tmp.idp.x, ++tmp.idp.y, tmp.shape, tmp.orient);
             break;
         case LEFT:
-            tmp.idp.x--;
-            for (int i = 0; i < LEN; i++) {
-                tmp.pixels[i].x--;
-                if (tmp.pixels[i].x < 1) {
-                    exit_status = 1;
-                    break;
-                }
+            exit_status = set_block(&tmp, --tmp.idp.x, tmp.idp.y, tmp.shape, tmp.orient);
+            if (exit_status == 2) {
+                exit_status--;
             }
             break;
         case RIGHT:
-            tmp.idp.x++;
-            for (int i = 0; i < LEN; i++) {
-                _block.pixels[i].x++;
-                if (tmp.pixels[i].x > 8) {
-                    exit_status = 1;
-                    break;
-                }
+            exit_status = set_block(&tmp, ++tmp.idp.x, tmp.idp.y, tmp.shape, tmp.orient);
+            if (exit_status == 2) {
+                exit_status--;
             }
             break;
     }
     if (!exit_status) {
         copy_block(&_block, &tmp);
+        print_game(screen);
     } else if (exit_status == 2){
         update_ground();
     }
 }
 
-void Tetris::rotate_block()
+void Tetris::rotate_block(MyDisp * screen)
 {
     int exit_status = 0;
     struct Block tmp;
@@ -160,6 +159,7 @@ void Tetris::rotate_block()
     exit_status = set_block(&tmp, tmp.idp.x, tmp.idp.y, tmp.shape, tmp.orient);
     if (!exit_status) {
         copy_block(&_block, &tmp);
+        print_game(screen);
     } else if (exit_status == 2){
         update_ground();
     }
@@ -177,15 +177,17 @@ void Tetris::update_ground()
     if (_state == PLAY) {
         check_line();
         draw_block();
+        _button_time = millis() - 500;
     }
 }
 
 void Tetris::check_line()
 {
     int cnt;
-    for (int i = M_SIZE - 1; i > 0; i--) {
+    int score = 0;
+    for (int j = M_SIZE - 1; j > 0; j--) {
         cnt = 0;
-        for (int j = 0; j < M_SIZE; j++) {
+        for (int i = 0; i < M_SIZE; i++) {
             if (_ground[i][j]) {
                 cnt++;
             } else {
@@ -193,17 +195,19 @@ void Tetris::check_line()
             }
         }
         if (cnt == 8) {
-            _score++;
-            for (int k = i; k > 0; k--) {
-                for (int j = 0; j < M_SIZE; j++) {
-                    _ground[k][j] = _ground[k - 1][j];
+            score++;
+            for (int k = j; k > 0; k--) {
+                for (int i = 0; i < M_SIZE; i++) {
+                    _ground[i][k] = _ground[i][k - 1];
                 }
             }
             for (int k = 0; k < M_SIZE; k++) {
-                _ground[0][k] = 0;
+                _ground[k][0] = 0;
             }
+            j++;
         }
     }
+    _score += score * score;
 }
 
 void Tetris::copy_block(struct Block * copy_to, struct Block * copy_from)
@@ -214,6 +218,8 @@ void Tetris::copy_block(struct Block * copy_to, struct Block * copy_from)
     }
     copy_to->idp.x = copy_from->idp.x;
     copy_to->idp.y = copy_from->idp.y;
+    copy_to->shape = copy_from->shape;
+    copy_to->orient = copy_from->orient;
 }
 
 int Tetris::set_block(struct Block * block, int x, int y, int shape, int orient)
@@ -262,11 +268,21 @@ int Tetris::set_block(struct Block * block, int x, int y, int shape, int orient)
                 for (int j = 0; j < LEN / 2; j++) {
                     index = 2 * i + j;
                     if (shape == S_BLOCK_1) {
-                         block->pixels[index].x = x + j + i * ((orient + 1) % 2);
-                         block->pixels[index].y = y + i + j * (orient % 2);
+                        if (orient % 2) {
+                            block->pixels[index].x = x + i;
+                            block->pixels[index].y = y + 2 - i - j;
+                        } else {
+                            block->pixels[index].x = x + j + i;
+                            block->pixels[index].y = y + i;
+                        }
                     } else {
-                         block->pixels[index].x = x + j - i * ((orient + 1) % 2);
-                         block->pixels[index].y = y + i - j * (orient % 2);
+                        if (orient % 2) {
+                            block->pixels[index].x = x + i;
+                            block->pixels[index].y = y + i + j;
+                        } else {
+                            block->pixels[index].x = x + j - i;
+                            block->pixels[index].y = y + i;
+                        }
                     }
                 }
             }
@@ -292,20 +308,20 @@ int Tetris::set_block(struct Block * block, int x, int y, int shape, int orient)
             }
             switch ((orient + mode) % 4) {
                 case 0:
-                    block->pixels[4].x = x - 1;
-                    block->pixels[4].y = y;
+                    block->pixels[3].x = x;
+                    block->pixels[3].y = y;
                     break;
                 case 1:
-                    block->pixels[4].x = x + 1;
-                    block->pixels[4].y = y;
+                    block->pixels[3].x = x + 2;
+                    block->pixels[3].y = y;
                     break;
                 case 2:
-                    block->pixels[4].x = x + 1;
-                    block->pixels[4].y = y + 2;
+                    block->pixels[3].x = x + 2;
+                    block->pixels[3].y = y + 2;
                     break;
                 case 3:
-                    block->pixels[4].x = x - 1;
-                    block->pixels[4].y = y + 2;
+                    block->pixels[3].x = x;
+                    block->pixels[3].y = y + 2;
                     break;
             }
             break;
@@ -325,4 +341,9 @@ int Tetris::validate_ground(struct Block * block)
         }
     }
     return 0;
+}
+
+unsigned long Tetris::get_button_time()
+{
+    return _button_time;
 }

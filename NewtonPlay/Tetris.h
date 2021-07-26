@@ -12,6 +12,7 @@
 
 #define LEN 4
 #define N_SHAPES 7
+#define DEBOUNCE 150
 
 enum State
 {
@@ -48,7 +49,7 @@ class Tetris
     public:
         Tetris();
         
-        virtual void button_action(int button);
+        virtual void button_action(MyDisp * screen, int button);
         virtual void screen_display(MyDisp * screen);
 
         void print_menu(MyDisp * screen);
@@ -56,8 +57,8 @@ class Tetris
         void print_game(MyDisp * screen);
 
         void draw_block();
-        void move_block(int dir);
-        void rotate_block();
+        void move_block(MyDisp * screen, int dir);
+        void rotate_block(MyDisp * screen);
         void update_ground();
         void check_line();
 
@@ -65,12 +66,15 @@ class Tetris
         int set_block(struct Block * block, int x, int y, int shape, int orient);
         int validate_ground(struct Block * block);
 
+        unsigned long get_button_time();
+
     private:
         struct Block _block;
         int _ground[M_SIZE][M_SIZE];
         int _state;
         int _score;
         int _delay;
+        unsigned long _button_time;
 };
 
 #endif
