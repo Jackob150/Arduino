@@ -2,7 +2,7 @@
 #include "MyDisp.h"
 #include "Controller.h"
 /* --- Import game header file --- */
-#include "Snake.h"
+#include "Tetris.h"
 /* ------------------------------- */
 
 ShiftReg disp = ShiftReg(5, 6, 7, 11);
@@ -10,7 +10,7 @@ ShiftReg ref = ShiftReg(8, 9, 10, 12);
 MyDisp screen = MyDisp(&disp, &ref, 1);
 Controller contr = Controller(14, 15, 16, 17, 2);
 /* --- Create game object from the proper class --- */
-Snake game = Snake();
+Tetris game = Tetris();
 /* ------------------------------------------------ */
 
 void interrupt_action()
