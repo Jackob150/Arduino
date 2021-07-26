@@ -1,21 +1,24 @@
 #include "ShiftReg.h"
 #include "MyDisp.h"
 #include "Controller.h"
-/* --- Import game header file --- */
-#include "Tetris.h"
-/* ------------------------------- */
+#include "Chooser.h"
+
+#define DEBOUNCER 150
 
 ShiftReg disp = ShiftReg(5, 6, 7, 11);
 ShiftReg ref = ShiftReg(8, 9, 10, 12);
 MyDisp screen = MyDisp(&disp, &ref, 1);
 Controller contr = Controller(14, 15, 16, 17, 2);
-/* --- Create game object from the proper class --- */
-Tetris game = Tetris();
-/* ------------------------------------------------ */
+Chooser chooser = Chooser();
+
+volatile unsigned long button_pressed = 0;
 
 void interrupt_action()
 {
-    game.button_action(&screen, contr.check_buttons());
+    if (millis() - button_pressed > DEBOUNCER) {
+        button_pressed = millis();
+        chooser.button_action(&screen, contr.check_buttons());
+    }
 }
 
 void setup() {
@@ -26,5 +29,5 @@ void setup() {
 }
 
 void loop() {
-    game.screen_display(&screen);
+    chooser.screen_display(&screen);
 }

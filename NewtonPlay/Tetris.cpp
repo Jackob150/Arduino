@@ -11,16 +11,15 @@
 
 Tetris::Tetris()
 {
-    _state = MENU;
+    _state = OUTER_MENU;
     _score = 0;
-    _button_time = 0;
 }
 
 void Tetris::button_action(MyDisp * screen, int button)
 {
     if (_state == MENU) {
         switch (button) {
-            case UP:
+            case UP: // reserved
                 break;
             case DOWN:
                 for (int i = 0; i < M_SIZE; i++) {
@@ -39,8 +38,7 @@ void Tetris::button_action(MyDisp * screen, int button)
             case RIGHT:
                 break;
         }
-    } else if (_state == PLAY && millis() - _button_time > DEBOUNCE) {
-        _button_time = millis();
+    } else if (_state == PLAY) {
         switch (button) {
             case UP:
                 rotate_block(screen);
@@ -60,14 +58,21 @@ void Tetris::button_action(MyDisp * screen, int button)
 
 void Tetris::screen_display(MyDisp * screen)
 {
-    if (_state == MENU) {
+    if (_state == OUTER_MENU) {
+        print_outer_menu(screen);
+    } else if (_state == MENU) {
         print_menu(screen);
-    }
-    if (_state == PLAY) {
+    } else if (_state == PLAY) {
         print_game(screen);
         screen->sleep(_delay);
         move_block(screen, DOWN);
     }
+}
+
+void Tetris::print_outer_menu(MyDisp * screen)
+{
+    screen->set_letter('T');
+    screen->display();
 }
 
 void Tetris::print_menu(MyDisp * screen)
@@ -177,7 +182,6 @@ void Tetris::update_ground()
     if (_state == PLAY) {
         check_line();
         draw_block();
-        _button_time = millis() - 500;
     }
 }
 
@@ -343,7 +347,12 @@ int Tetris::validate_ground(struct Block * block)
     return 0;
 }
 
-unsigned long Tetris::get_button_time()
+int Tetris::get_state()
 {
-    return _button_time;
+    return _state;
+}
+
+void Tetris::set_state(int state)
+{
+    _state = state;
 }

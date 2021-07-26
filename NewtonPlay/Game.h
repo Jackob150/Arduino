@@ -9,6 +9,18 @@
 #include "MyDisp.h"
 #include "Controller.h"
 
+enum State 
+{
+    OUTER_MENU,
+    MENU,
+    PLAY
+};
+
+struct Point
+{
+    int x, y;
+};
+
 class Game
 {
     public:

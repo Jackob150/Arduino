@@ -11,7 +11,7 @@
 
 Snake::Snake()
 {
-    _state = MENU;
+    _state = OUTER_MENU;
     _diff = 1;
 }
 
@@ -19,7 +19,7 @@ void Snake::button_action(MyDisp * screen, int button)
 {
     if (_state == MENU) {
         switch (button) {
-            case UP:
+            case UP: //reserved
                 break;
             case DOWN:
                 _state = PLAY;
@@ -58,10 +58,11 @@ void Snake::button_action(MyDisp * screen, int button)
 
 void Snake::screen_display(MyDisp * screen)
 {
-    if (_state == MENU) {
+    if (_state == OUTER_MENU) {
+        print_outer_menu(screen);
+    } else if (_state == MENU) {
         print_menu(screen);
-    }
-    if (_state == PLAY) {
+    } else if (_state == PLAY) {
         print(screen);
         screen->sleep(int(1000/_speed));
         move();
@@ -69,6 +70,12 @@ void Snake::screen_display(MyDisp * screen)
         check_tail(screen);
         check_apple();
     }
+}
+
+void Snake::print_outer_menu(MyDisp * screen)
+{
+    screen->set_letter('S');
+    screen->display();
 }
 
 void Snake::print_menu(MyDisp * screen)
@@ -177,4 +184,14 @@ void Snake::game_over(MyDisp * screen)
 {
     screen->sleep(1000);
     _state = MENU;
+}
+
+int Snake::get_state()
+{
+    return _state;
+}
+
+void Snake::set_state(int state)
+{
+    _state = state;
 }

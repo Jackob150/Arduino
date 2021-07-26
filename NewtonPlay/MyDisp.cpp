@@ -214,3 +214,29 @@ void MyDisp::print_digit(int x, int y, int digit)
             break;
     }
 }
+
+void MyDisp::set_letter(char c)
+{
+    empty_screen(false);
+    if (c == 'S') {
+        for (int i = 2; i <= M_SIZE - 1; i++) {
+            set_pix(1, i, 1);
+            set_pix(1, i, 2);
+            set_pix(1, i, 4);
+            set_pix(1, i, 5);
+            set_pix(1, i, 7);
+            set_pix(1, i, 8);
+        }
+        set_pix(1, 2, 3);
+        set_pix(1, 3, 3);
+        set_pix(1, 6, 6);
+        set_pix(1, 7, 6);
+    } else if (c == 'T') {
+        for (int i = 2; i <= M_SIZE - 1; i++) {
+            set_pix(1, i, 2);
+            set_pix(1, i, 3);
+            set_pix(1, 4, i);
+            set_pix(1, 5, i);
+        }
+    }
+}

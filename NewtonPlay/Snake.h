@@ -12,16 +12,6 @@
 
 #define MAX_LEN 64
 
-enum State {
-    MENU,
-    PLAY
-};
-
-struct Point
-{
-    int x, y;
-};
-
 class Snake
     : public Game
 {
@@ -31,9 +21,11 @@ class Snake
         virtual void button_action(MyDisp * screen, int button);
         virtual void screen_display(MyDisp * screen);
 
+        void print_outer_menu(MyDisp * screen);
         void print_menu(MyDisp * screen);
         void print_score(MyDisp * screen);
         void print(MyDisp * screen);
+
         void move();
         void check_bounds(MyDisp * screen);
         void check_tail(MyDisp * screen);
@@ -41,6 +33,9 @@ class Snake
         void place_apple();
         void put_apple();
         void game_over(MyDisp * screen);
+
+        int get_state();
+        void set_state(int state);
 
     private:
         struct Point _snake_arr[MAX_LEN];

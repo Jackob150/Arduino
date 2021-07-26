@@ -31,6 +31,7 @@ class MyDisp
         void set_pix(int val, int x, int y);
 
         void print_digit(int x, int y, int digit);
+        void set_letter(char c);
 
     private:
         ShiftReg * _disp;

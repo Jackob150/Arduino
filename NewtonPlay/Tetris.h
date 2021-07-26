@@ -12,13 +12,6 @@
 
 #define LEN 4
 #define N_SHAPES 7
-#define DEBOUNCE 150
-
-enum State
-{
-    MENU,
-    PLAY
-};
 
 enum Shape
 {
@@ -29,11 +22,6 @@ enum Shape
     S_BLOCK_2,
     L_BLOCK_1,
     L_BLOCK_2
-};
-
-struct Point
-{
-    int x, y;
 };
 
 struct Block
@@ -52,6 +40,7 @@ class Tetris
         virtual void button_action(MyDisp * screen, int button);
         virtual void screen_display(MyDisp * screen);
 
+        void print_outer_menu(MyDisp * screen);
         void print_menu(MyDisp * screen);
         void print_score(MyDisp * screen);
         void print_game(MyDisp * screen);
@@ -66,7 +55,8 @@ class Tetris
         int set_block(struct Block * block, int x, int y, int shape, int orient);
         int validate_ground(struct Block * block);
 
-        unsigned long get_button_time();
+        int get_state();
+        void set_state(int state);
 
     private:
         struct Block _block;
@@ -74,7 +64,6 @@ class Tetris
         int _state;
         int _score;
         int _delay;
-        unsigned long _button_time;
 };
 
 #endif
