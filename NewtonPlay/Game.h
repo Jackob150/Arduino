@@ -13,7 +13,8 @@ enum State
 {
     OUTER_MENU,
     MENU,
-    PLAY
+    PLAY,
+    HOLD
 };
 
 struct Point

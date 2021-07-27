@@ -52,6 +52,7 @@ class TicTac
         int _diff;
         int _player;
         int _winner;
+        int _passage;
         int _field;
         int _moves;
 };

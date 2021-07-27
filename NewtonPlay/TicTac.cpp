@@ -35,6 +35,7 @@ void TicTac::button_action(MyDisp * screen, int button)
                 }
                 _player = 0;
                 _winner = 0;
+                _passage = 0;
                 _field = 0;
                 _moves = 0;
                 _state = PLAY;
@@ -43,7 +44,9 @@ void TicTac::button_action(MyDisp * screen, int button)
                 _mode = (_mode + 1) % 2;
                 break;
             case RIGHT:
-                _diff = (_diff + 1) % 3;
+                if (!_mode) {
+                    _diff = (_diff + 1) % 3;
+                }
                 break;
         }
     } else if (_state == PLAY) {
@@ -65,6 +68,18 @@ void TicTac::button_action(MyDisp * screen, int button)
                 _field = (_field + 1) % 9;
                 break;
         }
+    } else if (_state == HOLD) {
+        switch (button) {
+            case UP:
+                break;
+            case DOWN:
+                _state = MENU;
+                break;
+            case LEFT:
+                break;
+            case RIGHT:
+                break;
+        }
     }
 }
 
@@ -79,6 +94,11 @@ void TicTac::screen_display(MyDisp * screen)
             make_move();
         }
         print_game(screen);
+    } else if (_state == HOLD) {
+        if (_winner) {
+            print_winner(screen);
+            _passage = 1;
+        }
     }
 }
 
@@ -131,8 +151,37 @@ void TicTac::print_game(MyDisp * screen)
 }
 
 void TicTac::print_winner(MyDisp * screen)
-{
-    
+{   
+    if (!_passage) {
+        screen->empty_screen();
+        screen->sleep(100);
+        for (int i = 1; i <= M_SIZE; i++) {
+            for (int j = 1; j <= M_SIZE; j++) {
+                screen->set_pix(1, j, i);
+            }
+            screen->sleep(100);
+        }
+        for (int i = M_SIZE; i > 0; i--) {
+            for (int j = 1; j <= M_SIZE; j++) {
+                screen->set_pix(0, j, i);
+            }
+            screen->sleep(100);
+        }
+    }
+    screen->print_digit(3, 2, _winner);
+    screen->set_pix(1, 1, 1);
+    screen->set_pix(1, 1, 2);
+    screen->set_pix(1, 2, 1);
+    screen->set_pix(1, 1, 7);
+    screen->set_pix(1, 1, 8);
+    screen->set_pix(1, 2, 8);
+    screen->set_pix(1, 7, 1);
+    screen->set_pix(1, 8, 1);
+    screen->set_pix(1, 8, 2);
+    screen->set_pix(1, 7, 8);
+    screen->set_pix(1, 8, 8);
+    screen->set_pix(1, 8, 7);
+    screen->display();
 }
 
 int TicTac::check_winner()
@@ -181,7 +230,7 @@ void TicTac::move_done()
 {
     _winner = check_winner();
     if (_winner) {
-        _state = MENU;
+        _state = HOLD;
         return;
     }
     _moves++;
