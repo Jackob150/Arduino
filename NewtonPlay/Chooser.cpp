@@ -10,6 +10,7 @@
 #include "Chooser.h"
 #include "Snake.h"
 #include "Tetris.h"
+#include "TicTac.h"
 
 Chooser::Chooser()
 {
@@ -17,6 +18,7 @@ Chooser::Chooser()
     _pointer = SNAKE;
     Snake snake = Snake();
     Tetris tetris = Tetris();
+    TicTac tictac = TicTac();
 }
 
 void Chooser::button_action(MyDisp * screen, int button)
@@ -35,6 +37,9 @@ void Chooser::button_action(MyDisp * screen, int button)
                     case TETRIS:
                         _tetris.set_state(MENU);
                         break;
+                    case TICTAC:
+                        _tictac.set_state(MENU);
+                        break;
                 }
                 break;
         }
@@ -46,6 +51,9 @@ void Chooser::button_action(MyDisp * screen, int button)
             } else if (_pointer == TETRIS && _tetris.get_state() == MENU) {
                 _state = OUTER_MENU;
                 _tetris.set_state(OUTER_MENU);
+            } else if (_pointer == TICTAC && _tictac.get_state() == MENU) {
+                _state = OUTER_MENU;
+                _tictac.set_state(OUTER_MENU);
             }
         }
         switch (_pointer) {
@@ -54,6 +62,9 @@ void Chooser::button_action(MyDisp * screen, int button)
                 break;
             case TETRIS:
                 _tetris.button_action(screen, button);
+                break;
+            case TICTAC:
+                _tictac.button_action(screen, button);
                 break;
         }
     }
@@ -67,5 +78,7 @@ void Chooser::screen_display(MyDisp * screen) {
         case TETRIS:
             _tetris.screen_display(screen);
             break;
+        case TICTAC:
+            _tictac.screen_display(screen);
     }
 }

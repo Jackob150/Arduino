@@ -238,5 +238,16 @@ void MyDisp::set_letter(char c)
             set_pix(1, 4, i);
             set_pix(1, 5, i);
         }
+    } else if (c == 'X') {
+        for (int i = 1; i <= M_SIZE; i++) {
+            set_pix(1, i, i);
+            set_pix(1, M_SIZE + 1 - i, i);
+            if (i > 1) {
+                set_pix(1, i, i - 1);
+                set_pix(1, i - 1, i);
+                set_pix(1, M_SIZE + 1 - i, i - 1);
+                set_pix(1, M_SIZE + 2 - i, i);
+            }
+        }
     }
 }

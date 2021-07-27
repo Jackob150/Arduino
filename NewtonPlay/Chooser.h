@@ -10,14 +10,16 @@
 #include "Controller.h"
 #include "Snake.h"
 #include "Tetris.h"
+#include "TicTac.h"
 #include "Game.h"
 
-#define N_GAMES 2
+#define N_GAMES 3
 
 enum Games 
 {
     SNAKE,
-    TETRIS
+    TETRIS,
+    TICTAC
 };
 
 class Chooser
@@ -32,6 +34,7 @@ class Chooser
     private:
         Snake _snake;
         Tetris _tetris;
+        TicTac _tictac;
         int _pointer;
         int _state;
 };
