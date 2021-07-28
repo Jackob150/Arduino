@@ -64,6 +64,7 @@ class Tetris
         int _state;
         int _score;
         int _delay;
+        int _diff;
 };
 
 #endif

@@ -13,6 +13,7 @@ Tetris::Tetris()
 {
     _state = OUTER_MENU;
     _score = 0;
+    _diff = 0;
 }
 
 void Tetris::button_action(MyDisp * screen, int button)
@@ -29,12 +30,16 @@ void Tetris::button_action(MyDisp * screen, int button)
                 }
                 draw_block();
                 _score = 0;
-                _delay = 1000;
+                _delay = 1000 - 150 * _diff;
                 _state = PLAY;
                 break;
             case LEFT:
+                if (_diff > 0)
+                    _diff--;
                 break;
             case RIGHT:
+                if (_diff < 6)
+                    _diff++;
                 break;
         }
     } else if (_state == PLAY) {
@@ -79,6 +84,9 @@ void Tetris::print_menu(MyDisp * screen)
     screen->empty_screen(false);
     screen->set_pix(1, 1, 1);
     screen->set_pix(1, 8, 1);
+    for (int i = 0; i < _diff; i++) {
+        screen->set_pix(1, 2 + i, 1);
+    }
     print_score(screen);
     screen->display();
 }
