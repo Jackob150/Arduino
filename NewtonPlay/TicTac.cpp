@@ -55,8 +55,10 @@ void TicTac::button_action(MyDisp * screen, int button)
                 _state = MENU;
                 break;
             case DOWN:
-                _table[_field % 3][(int)(_field / 3)] = _player + 1;
-                move_done();
+                if (_table[_field % 3][(int)(_field / 3)] == 0) {
+                    _table[_field % 3][(int)(_field / 3)] = _player + 1;
+                    move_done();
+                }
                 break;
             case LEFT:
                 _field--;
@@ -186,7 +188,6 @@ void TicTac::print_winner(MyDisp * screen)
 
 int TicTac::check_winner()
 {
-    int sum[8];
     if (_table[0][0] * _table[1][1] * _table[2][2] == 1)
         return 1;
     if (_table[0][0] * _table[1][1] * _table[2][2] == 8)
@@ -212,6 +213,7 @@ void TicTac::make_move()
 {
     switch (_diff) {
         case MONKEY:
+        {
             int monkey_field;
             do {
                 monkey_field = (int)(random(0, 9));
@@ -219,10 +221,77 @@ void TicTac::make_move()
             _table[monkey_field % 3][(int)(monkey_field / 3)] = _player + 1;
             move_done();
             break;
+        }
         case HUMAN:
+        {
+            for (int i = 0; i < T_SIZE; i++) {
+                for (int j = 0; j < T_SIZE; j++) {
+                    if (!_table[i][j]) {
+                        _table[i][j] = 2;
+                        if (check_winner() == 2) {
+                            move_done();
+                            return;
+                        } else {
+                            _table[i][j] = 0;
+                        }
+                    }
+                }
+            }
+            int human_field = 4;
+            while (_table[human_field % 3][(int)(human_field / 3)]) {
+                human_field = (int)(random(0, 9));
+            }
+            _table[human_field % 3][(int)(human_field / 3)] = _player + 1;
+            move_done();
             break;
+        }
         case GOD:
+        {
+            for (int i = 0; i < T_SIZE; i++) {
+                for (int j = 0; j < T_SIZE; j++) {
+                    if (!_table[i][j]) {
+                        _table[i][j] = 2;
+                        if (check_winner() == 2) {
+                            move_done();
+                            return;
+                        } else {
+                            _table[i][j] = 0;
+                        }
+                    }
+                }
+            }
+            for (int i = 0; i < T_SIZE; i++) {
+                for (int j = 0; j < T_SIZE; j++) {
+                    if (!_table[i][j]) {
+                        _table[i][j] = 1;
+                        if (check_winner() == 1) {
+                            _table[i][j] = 2;
+                            move_done();
+                            return;
+                        } else {
+                            _table[i][j] = 0;
+                        }
+                    }
+                }
+            }
+            int god_field = 4;
+            int counter = 0;
+            while (_table[god_field % 3][(int)(god_field / 3)] && counter < 5) {
+                god_field = (god_field + 2) % 10;
+                counter++;
+            }
+            if (counter < 5) {
+                _table[god_field % 3][(int)(god_field / 3)] = _player + 1;
+                move_done();
+            } else {
+                do {
+                    god_field = (int)(random(0, 9));
+                } while (_table[god_field % 3][(int)(god_field / 3)]);
+                _table[god_field % 3][(int)(god_field / 3)] = _player + 1;
+                move_done();
+            }
             break;
+        }
     }
 }
 
