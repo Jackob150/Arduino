@@ -31,7 +31,6 @@ void Tetris::button_action(MyDisp * screen, int button)
                 _score = 0;
                 _delay = 1000;
                 _state = PLAY;
-                move_block(screen, UP);
                 break;
             case LEFT:
                 break;
@@ -116,7 +115,7 @@ void Tetris::draw_block()
     _block.shape = type;
     _block.orient = 0;
     _block.idp.x = 4;
-    _block.idp.y = 1;
+    _block.idp.y = 0;
     set_block(&_block, _block.idp.x, _block.idp.y, _block.shape, _block.orient);
 }
 
@@ -128,30 +127,23 @@ void Tetris::move_block(MyDisp * screen, int dir)
     copy_block(&tmp, &_block);
     switch (dir) {
         case UP:
-            set_block(&tmp, tmp.idp.x, --tmp.idp.y, tmp.shape, tmp.orient);
             break;
         case DOWN:
             exit_status = set_block(&tmp, tmp.idp.x, ++tmp.idp.y, tmp.shape, tmp.orient);
             break;
         case LEFT:
             exit_status = set_block(&tmp, --tmp.idp.x, tmp.idp.y, tmp.shape, tmp.orient);
-            if (exit_status == 2) {
-                exit_status--;
-            }
             break;
         case RIGHT:
             exit_status = set_block(&tmp, ++tmp.idp.x, tmp.idp.y, tmp.shape, tmp.orient);
-            if (exit_status == 2) {
-                exit_status--;
-            }
             break;
     }
     if (!exit_status) {
         copy_block(&_block, &tmp);
-        print_game(screen);
-    } else if (exit_status == 2){
+    } else if (exit_status == 2 && dir == DOWN){
         update_ground();
     }
+    print_game(screen);
 }
 
 void Tetris::rotate_block(MyDisp * screen)
@@ -165,8 +157,6 @@ void Tetris::rotate_block(MyDisp * screen)
     if (!exit_status) {
         copy_block(&_block, &tmp);
         print_game(screen);
-    } else if (exit_status == 2){
-        update_ground();
     }
 }
 
@@ -174,12 +164,12 @@ void Tetris::update_ground()
 {
     for (int i = 0; i < LEN; i++) {
         _ground[_block.pixels[i].x - 1][_block.pixels[i].y - 1] = 1;
-        if (_block.pixels[i].y == 1) {
+        if (_block.pixels[i].y == 0) {
             _state = MENU;
             break;
         }
     }
-    if (_state == PLAY) {
+    if (_state != MENU) {
         check_line();
         draw_block();
     }
@@ -336,11 +326,11 @@ int Tetris::set_block(struct Block * block, int x, int y, int shape, int orient)
 int Tetris::validate_ground(struct Block * block)
 {
     for (int i = 0; i < LEN; i++) {
-        if (block->pixels[i].x < 1 || block->pixels[i].x > 8 || block->pixels[i].y < 1) {
+        if (block->pixels[i].x < 1 || block->pixels[i].x > 8) {
             return 1;
         } else if (block->pixels[i].y > 8) {
             return 2;
-        } else if (_ground[block->pixels[i].x - 1][block->pixels[i].y - 1]) {
+        } else if (_ground[block->pixels[i].x - 1][block->pixels[i].y - 1] == 1) {
             return 2;
         }
     }
